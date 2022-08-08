@@ -21,6 +21,21 @@ const routes = [
     path: '/productcreate',
     name: 'productcreate',
     component: () => import(/* webpackChunkName: "productcreate" */ '../views/ProductCreate.vue')
+  },
+  {
+    path: '/sales',
+    name: 'sales',
+    component: () => import(/* webpackChunkName: "productcreate" */ '../views/SalesList.vue')
+  },
+  {
+    path: '/image_insert',
+    name: 'image_insert',
+    component: () => import(/* webpackChunkName: "productcreate" */ '../views/ImageInsert.vue')
+  },
+  {
+    path: '/product_update',
+    name: 'product_update',
+    component: () => import(/* webpackChunkName: "productcreate" */ '../views/ProductUpdate.vue')
   }
 ]
 

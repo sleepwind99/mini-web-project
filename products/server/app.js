@@ -13,6 +13,10 @@ app.use(session({
     }
 }));
 
+app.use(express.json({
+    limit: '50mb'
+}));
+
 const server = app.listen(3000, () => {
     console.log('Server started. port 3000.');
 });
@@ -37,16 +41,19 @@ const db = {
 const dbPool = require('mysql').createPool(db);
 
 app.post('/api/login', async (request, res) => {
-    request.session['email'] = 'jjugo5331625@gmail.com';
-    res.send('ok');
+    try{
+        await req.db('signUp', request.body.param);
+        if(request.body.param.length > 0){
+            for(let key in request.body.param[0]) request.session[key] = request.body.param[0][key];
+            res.send(request.body.param[0]);
+        }else res.send({error: "Please try again or contact system manager."});
+    } catch(err){res.send({error: "DB access error"})}
 });
 
 app.post('/api/logout', async (request, res) => {
     request.session.destroy();
     res.send('ok');
 });
-
-
 
 app.post('/apirole/:alias', async (request, res) => {
     if(!request.session.email) {
@@ -63,7 +70,7 @@ app.post('/apirole/:alias', async (request, res) => {
 
 app.post('/api/:alias', async (request, res) => {
     try{
-        res.send(await req.db(request.params.alias));
+        res.send(await req.db(request.params.alias, request.body.param));
     } catch(err){
         res.status(500).send({error: err});
     }
